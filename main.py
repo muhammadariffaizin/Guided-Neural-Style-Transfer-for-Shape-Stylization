@@ -28,7 +28,7 @@ parser.add_argument('--delta', type=float, default=1e2,  help='Weight for distan
 # parser for patch size
 parser.add_argument('--patch_size', '-patch_size', type=int, default=5, help='Patch size')
 # parser for initialization
-parser.add_argument('--init', type=str, default='random', help='Initialization type', list=['random', 'content'])
+parser.add_argument('--init', type=str, default='random', help='Initialization type', choices=['random', 'content'])
 # parser for input images paths and names
 parser.add_argument('--content_path',type=str, default='./inputs/contents/Swallow-Silhouette.jpg', help='Path to content image')
 parser.add_argument('--style_path',    type=str, default='./inputs/styles/delicate.jpg', help='Path to content image')
