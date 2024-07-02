@@ -19,23 +19,25 @@ from tqdm import tqdm
 # PARSER
 parser = argparse.ArgumentParser(description='CNNMRF')
 # parser for image
-parser.add_argument('-image_size', type=int, default=256)
+parser.add_argument('--image_size', type=int, default=256)
 # parser for weights
-parser.add_argument('-alpha', type=float, default=1e-1, help='Weight for content')
-parser.add_argument('-beta',  type=float, default=1e-1, help='Weight for style')
-parser.add_argument('-gamma', type=float, default=1e-6, help='Weight for mrf')
-parser.add_argument('-delta', type=float, default=1e2,  help='Weight for distance loss')
+parser.add_argument('--alpha', type=float, default=1e-1, help='Weight for content')
+parser.add_argument('--beta',  type=float, default=1e-1, help='Weight for style')
+parser.add_argument('--gamma', type=float, default=1e-6, help='Weight for mrf')
+parser.add_argument('--delta', type=float, default=1e2,  help='Weight for distance loss')
 # parser for patch size
-parser.add_argument('-patch_size', '-patch_size', type=int, default=5, help='Patch size')
+parser.add_argument('--patch_size', '-patch_size', type=int, default=5, help='Patch size')
+# parser for initialization
+parser.add_argument('--init', type=str, default='random', help='Initialization type', list=['random', 'content'])
 # parser for input images paths and names
-parser.add_argument('-content_path',type=str, default='./inputs/contents/Swallow-Silhouette.jpg', help='Path to content image')
-parser.add_argument('-style_path',    type=str, default='./inputs/styles/delicate.jpg', help='Path to content image')
+parser.add_argument('--content_path',type=str, default='./inputs/contents/Swallow-Silhouette.jpg', help='Path to content image')
+parser.add_argument('--style_path',    type=str, default='./inputs/styles/delicate.jpg', help='Path to content image')
 # parser for output path
-parser.add_argument('-output_dir', type=str, default='./sample_outputs/', help='Path to save output files')
+parser.add_argument('--output_dir', type=str, default='./sample_outputs/', help='Path to save output files')
 # parser for cuda
-parser.add_argument('-cuda', type=int, default=0, help='gpu # or -1 for cpu')
+parser.add_argument('--cuda', type=int, default=0, help='gpu # or -1 for cpu')
 # parser for number of iterations
-parser.add_argument('-epoch', type=int, default=5000, help='Number of iterations to run')
+parser.add_argument('--epoch', type=int, default=5000, help='Number of iterations to run')
 
 args = parser.parse_args()
 #############################################################################
@@ -95,10 +97,12 @@ vgg.to(device)
 content_img = load_image(content_path, image_size, device, content_invert)
 style_img = load_image(style_path, image_size, device, style_invert)
 
-# Random initialization
-opt_img = Variable(torch.randn(content_img.size()).type_as(content_img.data).to(device), requires_grad=True).to(device)
-# Content initialization
-# opt_img = Variable(content_img.data.clone(), requires_grad=True)
+if args.init == 'random':
+    # Random initialization
+    opt_img = Variable(torch.randn(content_img.size()).type_as(content_img.data).to(device), requires_grad=True).to(device)
+elif args.init == 'content':
+    # Content initialization
+    opt_img = Variable(content_img.data.clone().to(device), requires_grad=True).to(device)
 
 save_images(content_img.data[0].cpu().squeeze(), style_img.data[0].cpu().squeeze(), opt_img.data[0].cpu().squeeze(), image_size, output_dir, 0, content_invert, style_invert, result_invert)
 

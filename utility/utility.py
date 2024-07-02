@@ -123,7 +123,8 @@ def dist_cv2(input_tensor, device, image_size, content_invert):
     img = ndimage.grey_erosion(img, size=(3,3))
 
     img_dist = cv2.distanceTransform(img, cv2.DIST_L2, 3)
-    cont_dist = torch.from_numpy(img_dist).float().to(device)
+    cont_dist = torch.from_numpy(img_dist).float()
+    cont_dist = cont_dist.to(device)
     f = cont_dist.unsqueeze(0)
     a = torch.cat((f,f,f),0)
     a = a.unsqueeze(0)    
