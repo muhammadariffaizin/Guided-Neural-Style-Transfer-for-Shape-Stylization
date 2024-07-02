@@ -131,6 +131,9 @@ def dist_cv2(input_tensor, device, image_size, content_invert):
     return a
 
 def save_plot(loss_list, label, output_path):
+    if isinstance(loss_list, torch.Tensor):
+        loss_list = loss_list.cpu().numpy()
+
     plt.plot(loss_list, label=label)
     plt.legend()
     plt.savefig(f'{output_path}{label}.jpg')
