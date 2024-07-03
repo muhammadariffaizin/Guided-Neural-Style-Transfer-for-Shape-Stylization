@@ -123,17 +123,13 @@ def dist_cv2(input_tensor, device, image_size, content_invert):
     img = ndimage.grey_erosion(img, size=(3,3))
 
     img_dist = cv2.distanceTransform(img, cv2.DIST_L2, 3)
-    cont_dist = torch.from_numpy(img_dist).float()
-    cont_dist = cont_dist.to(device)
+    cont_dist = torch.from_numpy(img_dist).float().to(device)
     f = cont_dist.unsqueeze(0)
     a = torch.cat((f,f,f),0)
     a = a.unsqueeze(0)    
     return a
 
 def save_plot(loss_list, label, output_path):
-    if isinstance(loss_list, torch.Tensor):
-        loss_list = loss_list.cpu().numpy()
-
     plt.plot(loss_list, label=label)
     plt.legend()
     plt.savefig(f'{output_path}{label}.jpg')

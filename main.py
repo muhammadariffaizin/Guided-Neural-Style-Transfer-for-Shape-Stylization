@@ -209,11 +209,11 @@ while n_iter[0] <= max_iter:
             tqdm.write('Total loss   : {}'.format(total_loss.item()))
 
             # Save loss graph
-            save_plot(loss_list, label='total loss',output_path=output_dir)
-            save_plot(content_loss_list, label='content loss',output_path=output_dir)
-            save_plot(style_loss_list, label='style loss',output_path=output_dir)
-            save_plot(mrf_loss_list, label='mrf loss',output_path=output_dir)
-            save_plot(dist_loss_list, label='dist loss', output_path=output_dir)
+            # save_plot(loss_list, label='total loss',output_path=output_dir)
+            # save_plot(content_loss_list, label='content loss',output_path=output_dir)
+            # save_plot(style_loss_list, label='style loss',output_path=output_dir)
+            # save_plot(mrf_loss_list, label='mrf loss',output_path=output_dir)
+            # save_plot(dist_loss_list, label='dist loss', output_path=output_dir)
 
             # Save optimized image
             out_img = postp(opt_img.data[0].cpu().squeeze(), image_size, result_invert)
